@@ -1,0 +1,17 @@
+{
+  "name": "pixi test",
+  "version": "0.0.1",
+  "authors": [
+    "Tom Hutman <tom@charliebravo.nl>"
+  ],
+  "description": "Initial tests with pixi",
+  "main": "index.html",
+  "keywords": [
+    "pixi",
+    "jizz"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "pixi": "~2.2.8"
+  }
+}
