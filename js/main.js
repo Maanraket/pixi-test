@@ -8,12 +8,6 @@
     renderer.blendModeManager.setBlendMode(1);
     renderer.mapBlendModes();
     var canvas1 = document.body.appendChild(renderer.view);
-    var canvas2 = document.body.appendChild(renderer.view.cloneNode());
-    $(canvas2).css({
-        'position': 'absolute',
-        'left': '50%',
-        'top': '100%'
-    });
 
     var stage = new PIXI.Stage;
     var numberStars = 30000;
@@ -69,8 +63,6 @@
 
 
         renderer.render(stage);
-
-        //canvas2.getContext('2d').drawImage(canvas1,0,0);
 
         requestAnimationFrame(animate);
     }
