@@ -1,4 +1,4 @@
-(function(){ 
+//(function(){ 
     var _width = 320;
     var _height = 320;
 
@@ -10,29 +10,41 @@
     var canvas1 = document.body.appendChild(renderer.view);
 
     var stage = new PIXI.Stage;
-    var numberStars = 30000;
-    var starContainers = Array();
+    var numberStars, starContainers,speed;
     starTexture = PIXI.Texture.fromImage("img/dot.png");
-    for(var i=0;i<numberStars;i++){
-        star =  new PIXI.Sprite(starTexture);
 
-        star.position.x = Math.random() * _width;
-        star.position.y = Math.random() * _height;
-
-        star.scale.x = .2;
-        star.scale.y = .2;
-        star.alpha = .6;
-
-        starContainers.push({
-            star: star,
-            x: Math.random() * _width * 6 - _width / 2 * 6,
-            y: Math.random() * _width * 6 - _width / 2 * 6,
-            step: Math.round(Math.random()*1000)
-        });
-
-        stage.addChild(star);
+    var parameters = {
+        amountOfStars: 12000,
+        velocity: 8,
+        deviatonmultiplier: 0.45
     }
 
+    function starvaganza(amount){
+        starContainers = [];
+        stage.removeChildren();
+        numberStars = amount;
+        for(var i=0;i<numberStars;i++){
+            star =  new PIXI.Sprite(starTexture);
+
+            star.position.x = Math.random() * _width;
+            star.position.y = Math.random() * _height;
+
+            star.scale.x = .2;
+            star.scale.y = .2;
+            star.alpha = .6;
+
+            starContainers.push({
+                star: star,
+                x: Math.random() * _width * 6 - _width / 2 * 6,
+                y: Math.random() * _width * 6 - _width / 2 * 6,
+                step: Math.round(Math.random()*1000)
+            });
+            stage.addChild(star);
+        }
+    }
+    starvaganza(parameters.amountOfStars);
+    speed = parameters.velocity;
+    
     requestAnimationFrame(animate);
     var mousePos = {x:_width/2,y:_height/2};
     var counter = 0;
@@ -41,11 +53,11 @@
         counter++;
         //var mousePos = stage.getMousePosition().x > 0 ? stage.getMousePosition() : {x:_width/2,y:_height/2};
         mousePos = stage.getMousePosition().x > 0 ? {x:mousePos.x * (1-mouseEasing) + stage.getMousePosition().x*mouseEasing, y:mousePos.y * (1-mouseEasing) + stage.getMousePosition().y*mouseEasing} : mousePos;
-        var deviation = {x:(mousePos.x-_width/2)/_width + Math.sin(counter/100)*0.45, y:(mousePos.y-_height/2)/_height + Math.sin(counter/80+1.5)*0.45};
+        var deviation = {x:(mousePos.x-_width/2)/_width + Math.sin(counter/100)*parameters.deviatonmultiplier, y:(mousePos.y-_height/2)/_height + Math.sin(counter/80+1.5)*parameters.deviatonmultiplier};
         
         for(var i=0;i<numberStars;i++){
-            var stepSize = Math.sqrt(Math.abs(starContainers[i].x) + Math.abs(starContainers[i].y)) * (Math.pow(starContainers[i].step,3)/100000) * (0.90+Math.random()*.2) * (Math.sin(counter/100)/2+1); 
-            starContainers[i].step = starContainers[i].step < 1000 ? starContainers[i].step + stepSize: Math.random()*5;
+            var stepSize = (Math.sqrt(Math.abs(starContainers[i].x) + Math.abs(starContainers[i].y)) * (Math.pow(starContainers[i].step,3)/100000) * (0.90+Math.random()*.2))*speed; 
+            starContainers[i].step = starContainers[i].step < 2000 ? starContainers[i].step + stepSize: Math.random()*5;
             starContainers[i].star.position.x = _width/2 + starContainers[i].x * Math.pow(starContainers[i].step,2)/50 + deviation.x*_width*starContainers[i].step/50;
             starContainers[i].star.position.y = _height/2 + starContainers[i].y * Math.pow(starContainers[i].step,2)/50 + deviation.y*_height*starContainers[i].step/50;
             
@@ -61,13 +73,10 @@
             }
         }
 
-
         renderer.render(stage);
-
         requestAnimationFrame(animate);
     }
 
-    window.onresize = resizeHandler;
     var resizeHandler = function(event) {
         var w = window,
         d = document,
@@ -79,6 +88,9 @@
         _width = x;
         _height = y;
         renderer.resize(x,y);
+        starvaganza(parameters.amountOfStars);
+        console.log('kut');
     };
-    resizeHandler();
-})();
+    window.onresize = resizeHandler;
+    window.onload = resizeHandler;
+//})();
