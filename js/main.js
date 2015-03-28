@@ -13,10 +13,11 @@
     var numberStars, starContainers,speed;
     starTexture = PIXI.Texture.fromImage("img/dot.png");
 
-    var parameters = {
+    var param = {
         amountOfStars: 12000,
         velocity: 8,
-        deviatonmultiplier: 0.45
+        impact: 10,
+        deviatonmultiplier: 1
     }
 
     function starvaganza(amount){
@@ -42,8 +43,8 @@
             stage.addChild(star);
         }
     }
-    starvaganza(parameters.amountOfStars);
-    speed = parameters.velocity;
+    starvaganza(param.amountOfStars);
+    speed = param.velocity;
     
     requestAnimationFrame(animate);
     var mousePos = {x:_width/2,y:_height/2};
@@ -53,7 +54,7 @@
         counter++;
         //var mousePos = stage.getMousePosition().x > 0 ? stage.getMousePosition() : {x:_width/2,y:_height/2};
         mousePos = stage.getMousePosition().x > 0 ? {x:mousePos.x * (1-mouseEasing) + stage.getMousePosition().x*mouseEasing, y:mousePos.y * (1-mouseEasing) + stage.getMousePosition().y*mouseEasing} : mousePos;
-        var deviation = {x:(mousePos.x-_width/2)/_width + Math.sin(counter/100)*parameters.deviatonmultiplier, y:(mousePos.y-_height/2)/_height + Math.sin(counter/80+1.5)*parameters.deviatonmultiplier};
+        var deviation = {x:(mousePos.x-_width/2)/(_width*(1/param.impact)) + param.deviatonmultiplier*Math.sin(counter/100), y:(mousePos.y-_height/2)/(_height*(1/param.impact)) + param.deviatonmultiplier*Math.sin(counter/80+1.5)};
         
         for(var i=0;i<numberStars;i++){
             var stepSize = (Math.sqrt(Math.abs(starContainers[i].x) + Math.abs(starContainers[i].y)) * (Math.pow(starContainers[i].step,3)/100000) * (0.90+Math.random()*.2))*speed; 
@@ -88,7 +89,7 @@
         _width = x;
         _height = y;
         renderer.resize(x,y);
-        starvaganza(parameters.amountOfStars);
+        starvaganza(param.amountOfStars);
         console.log('kut');
     };
     window.onresize = resizeHandler;
