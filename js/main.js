@@ -1,4 +1,4 @@
-//(function(){ 
+(function(){ 
     var _width = 320;
     var _height = 320;
 
@@ -70,10 +70,10 @@
 
     $(document).ready(function() {
 	    $('#controls').mouseup(function(){
-	    	if(document.getElementById('amountOfStars').value!=param.amountOfStars){
+	    	if(document.getElementById('amountOfStars').value!==param.amountOfStars){
 	    		param.amountOfStars = document.getElementById('amountOfStars').value;
 	    		starvaganza(param.amountOfStars);
-	    	} else if(document.getElementById('destinationsize').value!=param.destinationsize){
+	    	} else if(document.getElementById('destinationsize').value!==param.destinationsize){
 	    		param.destinationsize = document.getElementById('destinationsize').value;
 	    		starvaganza(param.amountOfStars);
 	    	}
@@ -99,4 +99,4 @@
     };
     window.onresize = resizeHandler;
     window.onload = resizeHandler;
-//})();
+})();
