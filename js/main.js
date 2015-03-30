@@ -15,10 +15,10 @@
 
     var param = {
         amountOfStars: 25000,           // the amount of stars spawned at a time
+        destinationsize: 5,             // determines the circle that the stars want to go towards (e.g. 5 times your screensize)
         velocity: 6,                    // the speed of the stars coming towards the screen
         impact: 10,                     // the amount of influence the mouse has on the scene (I like 10)
         deviatonmultiplier: 0.45,       // the amount of deviation that the scene generates by itself
-        destinationsize: 5,             // determines the circle that the stars want to go towards (e.g. 5 times your screensize)
         stretch: 1.5                    // amplifies the length of the stars when they gain more speed (for the warpspeed effect!)
     }
 
@@ -37,8 +37,8 @@
 
             starContainers.push({
                 star: star,
-                x: _width/2 + (Math.cos(angle)*(_width/2)*param.destinationsize),
-                y: _width/2 + (Math.sin(angle)*(_width/2)*param.destinationsize),
+                x: _width/2 + (Math.cos(angle)*(_width/2)*param.destinationsize*(0.80+Math.random()*.4)),
+                y: _width/2 + (Math.sin(angle)*(_width/2)*param.destinationsize*(0.80+Math.random()*.4)),
                 step: Math.round(Math.random()*1000),
                 angle: angle
             });
@@ -64,10 +64,25 @@
             starContainers[i].star.scale.y = Math.pow(starContainers[i].step,2)/(2/param.stretch);
             starContainers[i].star.rotation = starContainers[i].angle+Math.PI/2;
         }
-
         renderer.render(stage);
         requestAnimationFrame(animate);
     }
+
+    $(document).ready(function() {
+	    $('#controls').mouseup(function(){
+	    	if(document.getElementById('amountOfStars').value!=param.amountOfStars){
+	    		param.amountOfStars = document.getElementById('amountOfStars').value;
+	    		starvaganza(param.amountOfStars);
+	    	} else if(document.getElementById('destinationsize').value!=param.destinationsize){
+	    		param.destinationsize = document.getElementById('destinationsize').value;
+	    		starvaganza(param.amountOfStars);
+	    	}
+	        param.velocity = document.getElementById('velocity').value;
+	        param.impact = document.getElementById('impact').value;
+	        param.deviatonmultiplier = document.getElementById('deviationmultiplier').value;
+	        param.stretch = document.getElementById('stretch').value;
+	    });
+	});
 
     var resizeHandler = function(event) {
         var w = window,
